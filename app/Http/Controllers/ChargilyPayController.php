@@ -25,11 +25,7 @@ class ChargilyPayController extends Controller
             'amount'   => $amount,
         ]);
 
-        $user = User::FindOrFail($userId);
-
-       $user->is_active = true;
-
-        $user->save();
+   
         
         $checkout = $this->chargilyPayInstance()->checkouts()->create([
             'metadata' => [
@@ -41,11 +37,16 @@ class ChargilyPayController extends Controller
             'description' => "Payment ID={$payment->id}",
             'success_url' => route('chargilypay.back'),
             'failure_url' => route('chargilypay.back'),
-            // 'webhook_endpoint' => route('chargilypay.webhook'),
             
         ]);
 
-        return redirect($checkout->getUrl());
+             $user = User::FindOrFail($userId);
+
+       $user->is_active = true;
+
+        $user->save();
+        return response()->json(["url"=>$checkout->getUrl()]);
+
     }
 
     public function back(Request $request)
