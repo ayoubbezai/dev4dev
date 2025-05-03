@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChargilyPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\Result;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ResultController extends Controller
@@ -73,4 +75,63 @@ class ResultController extends Controller
             ], 500);
         }
     }
+
+public function getHistory()
+{
+    $user = Auth::user();
+    
+    $history = Result::where('user_id', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    return response()->json([
+        'success' => true,
+        'data' => $history,
+        'message' => 'History retrieved successfully'
+    ]);
+}
+
+// In your Laravel Controller (e.g., StatsController.php)
+
+public function getStat()
+{
+    // Total number of users
+    $numberOfUsers = User::count();
+    
+    // Total payment amount (sum of all successful payments)
+    $paymentTotal = ChargilyPayment::where('status', 'paid')->sum('amount');
+    
+    // Total number of tests (assuming each test has 3 results)
+    $numberOfTests = ceil(Result::count() / 3);
+    
+    // Total number of result links
+    $numberOfLinks = Result::count();
+    
+    // Monthly payment data for the chart
+    $monthlyPayments = ChargilyPayment::where('status', 'paid')
+        ->selectRaw('SUM(amount) as total, MONTH(created_at) as month')
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+    
+    // Format monthly data for chart
+    $paymentChartData = [];
+    $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    foreach ($months as $index => $month) {
+        $payment = $monthlyPayments->firstWhere('month', $index + 1);
+        $paymentChartData[$month] = $payment ? $payment->total : 0;
+    }
+    
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'totalUsers' => $numberOfUsers,
+            'totalPayments' => $paymentTotal,
+            'totalTests' => $numberOfTests,
+            'totalLinks' => $numberOfLinks,
+            'paymentChartData' => $paymentChartData
+        ]
+    ]);
+}
 }

@@ -26,6 +26,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'currentUser']);
+    Route::get('/getHistory', [ResultController::class, 'getHistory']);
     Route::post('chargilypay/redirect', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
     Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
     Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
@@ -43,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('chargilypay/redirect', [ChargilyPayController::class, 'redirect'])->name('chargilypay.redirect');
     Route::get('chargilypay/back', [ChargilyPayController::class, 'back'])->name('chargilypay.back');
     Route::resource('/users', UserController::class);
+    Route::get('/stats', [ResultController::class, 'getStat']);
+
 
 });
 Route::post('chargilypay/webhook', [ChargilyPayController::class, 'webhook'])->name('chargilypay.webhook');
