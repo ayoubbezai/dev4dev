@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
     
     
-    Route::post('/getDataFromAgent', [ResultController::class, 'processPdf']);
+    Route::post('/getDataFromAgent', [ResultController::class, 'processPdf'])->middleware('simple.rate.limit');;
 });
 
 // Optional: Admin-only routes

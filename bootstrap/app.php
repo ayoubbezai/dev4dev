@@ -17,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'check.access' => \App\Http\Middleware\CheckUserAccess::class,
+            'simple.rate.limit' => \App\Http\Middleware\SimpleRateLimiter::class,
+
 
     ]);
 })
