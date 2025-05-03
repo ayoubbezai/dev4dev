@@ -4,10 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChargilyPayController;
-
-
-
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +40,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('chargilypay/redirect', [ChargilyPayController::class, 'redirect'])->name('chargilypay.redirect');
     Route::get('chargilypay/back', [ChargilyPayController::class, 'back'])->name('chargilypay.back');
+    Route::resource('/users', UserController::class);
+
 });
 Route::post('chargilypay/webhook', [ChargilyPayController::class, 'webhook'])->name('chargilypay.webhook');
 

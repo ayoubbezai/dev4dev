@@ -8,6 +8,7 @@ use App\Models\User;
 use Chargily\ChargilyPay\ChargilyPay;
 use Chargily\ChargilyPay\Auth\Credentials;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ChargilyPayController extends Controller
 {
@@ -42,7 +43,8 @@ class ChargilyPayController extends Controller
 
              $user = User::FindOrFail($userId);
 
-       $user->is_active = true;
+$user->access_expires_at = Carbon::now()->addDays(30);
+
 
         $user->save();
         return response()->json(["url"=>$checkout->getUrl()]);

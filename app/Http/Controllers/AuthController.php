@@ -116,7 +116,7 @@ class AuthController extends Controller
                     "name" => $currentUser->name,
                     "email" => $currentUser->email,
                     "role" => $currentUser->role,
-                    "is_active" => $currentUser->is_active,
+                    "access_expires_at" => $currentUser->access_expires_at,
                 ],
             ], 200);
 
