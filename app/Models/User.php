@@ -56,4 +56,8 @@ class User extends Authenticatable
 {
     return $this->hasMany(ChargilyPayment::class);
 }
+            public function results()
+{
+    return $this->hasMany(Result::class);
+}
 }
