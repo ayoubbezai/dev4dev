@@ -1,0 +1,20 @@
+# render.yaml
+services:
+  - type: web
+    name: crewai-pdf-processor
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    plan: free
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LAMA_API_KEY
+        sync: false
+      - key: PYTHONUNBUFFERED
+        value: true
+
+# Procfile (no extension)
+web: gunicorn app:app
